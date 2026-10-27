@@ -1,0 +1,44 @@
+name: Deploy
+
+# Deploy to Netlify production only after CI has passed on main
+on:
+    workflow_run:
+        workflows: [CI]
+        types: [completed]
+        branches: [main]
+    workflow_dispatch:
+
+concurrency:
+    group: deploy-production
+    cancel-in-progress: false
+
+jobs:
+    deploy:
+        name: Netlify production
+        if:
+            github.event_name == 'workflow_dispatch' ||
+            (github.event.workflow_run.conclusion == 'success' &&
+            github.event.workflow_run.event == 'push')
+        runs-on: ubuntu-latest
+        environment:
+            name: production
+            url: ${{ steps.deploy.outputs.url }}
+        steps:
+            - uses: actions/checkout@v5
+              with:
+                  ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+            - uses: actions/setup-node@v5
+              with:
+                  node-version: 22
+                  cache: npm
+            - run: npm ci
+            - run: npm run build
+            - name: Deploy to Netlify
+              id: deploy
+              env:
+                  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+                  NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+              run: |
+                  npx --yes netlify-cli@27.12.0 deploy --prod --dir=dist --no-build --json \
+                      --message "Deploy $(git rev-parse --short HEAD)" > deploy.json
+                  echo "url=$(jq -r '.url' deploy.json)" >> "$GITHUB_OUTPUT"
