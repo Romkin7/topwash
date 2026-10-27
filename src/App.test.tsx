@@ -90,6 +90,30 @@ describe('contact details', () => {
     });
 });
 
+describe('facebook', () => {
+    it('links to the Facebook page from contact and footer in a new tab', () => {
+        render(<App />);
+        const contactLink = within(
+            document.getElementById('yhteystiedot')!,
+        ).getByRole('link', {
+            name: 'facebook.com/topwashklaukkala',
+        });
+        const footerLink = within(screen.getByRole('contentinfo')).getByRole(
+            'link',
+            {
+                name: 'Facebook',
+            },
+        );
+        for (const link of [contactLink, footerLink]) {
+            expect(link).toHaveAttribute(
+                'href',
+                'https://www.facebook.com/topwashklaukkala',
+            );
+            expect(link).toHaveAttribute('target', '_blank');
+        }
+    });
+});
+
 describe('footer', () => {
     it('shows current year, company name and Y-tunnus', () => {
         setNow('2026-10-27T12:00:00');

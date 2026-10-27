@@ -57,8 +57,8 @@ src/
 
 Business details are constants at the top of `src/App.tsx`:
 
-- `ADDRESS`, `PHONE`, `PHONE_HREF`, `EMAIL`, `MAP_QUERY`: contact details and
-  map location
+- `ADDRESS`, `PHONE`, `PHONE_HREF`, `EMAIL`, `FACEBOOK_URL`, `MAP_QUERY`:
+  contact details and map location
 - `COMPANY`, `BUSINESS_ID`: owner company and Y-tunnus shown in the footer
 - `OPEN_HOUR`, `CLOSE_HOUR`: drive the "Avoinna nyt" / "Suljettu" badge
 - `HOURS`: the opening hours list, Monday first. Add a `note` to a day for

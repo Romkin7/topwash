@@ -4,6 +4,7 @@ const ADDRESS = 'Klaukkalantie 74, 01800 Klaukkala';
 const PHONE = '045 1863033';
 const PHONE_HREF = 'tel:+358451863033';
 const EMAIL = 'ak.terminaali@gmail.com';
+const FACEBOOK_URL = 'https://www.facebook.com/topwashklaukkala';
 const COMPANY = 'ATMD Oy';
 const BUSINESS_ID = '2470070-6';
 const MAP_QUERY = encodeURIComponent(
@@ -211,6 +212,16 @@ function Contact() {
                             <span className="contact-label">Sähköposti</span>
                             <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
                         </li>
+                        <li>
+                            <span className="contact-label">Facebook</span>
+                            <a
+                                href={FACEBOOK_URL}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                facebook.com/topwashklaukkala
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <iframe
@@ -235,6 +246,9 @@ function Footer() {
                 </span>
                 <span>{ADDRESS}</span>
                 <a href={PHONE_HREF}>{PHONE}</a>
+                <a href={FACEBOOK_URL} target="_blank" rel="noreferrer">
+                    Facebook
+                </a>
             </div>
         </footer>
     );
