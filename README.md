@@ -1,87 +1,83 @@
-# React + TypeScript + Vite
+# TopWash Klaukkala
 
-This template provides a minimal setup to get React working in Vite with HMR and
-some ESLint rules.
+Website for TopWash, an automatic car wash at Klaukkalantie 74, 01800 Klaukkala.
+The site is in Finnish and is a single page: services and payment methods,
+opening hours, contact details with a map, and the company details in the
+footer.
 
-Currently, two official plugins are available:
+Owner: ATMD Oy (Y-tunnus 2470070-6).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react)
-  uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc)
-  uses [SWC](https://swc.rs/)
+Built with React 19, TypeScript and Vite, with the React Compiler enabled.
 
-## React Compiler
+## Getting started
 
-The React Compiler is enabled on this template. See
-[this documentation](https://react.dev/learn/react-compiler) for more
-information.
+Requires Node.js 22 or newer.
 
-Note: This will impact Vite dev & build performances. You can also try
-[the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler)
-by using `compiler: true` in the plugin options instead of using the Babel
-plugin.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the
-configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-    globalIgnores(['dist']),
-    {
-        files: ['**/*.{ts,tsx}'],
-        extends: [
-            // Other configs...
-
-            // Remove tseslint.configs.recommended and replace with this
-            tseslint.configs.recommendedTypeChecked,
-            // Alternatively, use this for stricter rules
-            tseslint.configs.strictTypeChecked,
-            // Optionally, add this for stylistic rules
-            tseslint.configs.stylisticTypeChecked,
-
-            // Other configs...
-        ],
-        languageOptions: {
-            parserOptions: {
-                project: ['./tsconfig.node.json', './tsconfig.app.json'],
-                tsconfigRootDir: import.meta.dirname,
-            },
-            // other options...
-        },
-    },
-]);
+```sh
+npm install
+npm run dev
 ```
 
-You can also install
-[eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and
-[eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for
-React-specific lint rules:
+The dev server prints the local URL (by default http://localhost:5173).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+## Scripts
 
-export default defineConfig([
-    globalIgnores(['dist']),
-    {
-        files: ['**/*.{ts,tsx}'],
-        extends: [
-            // Other configs...
-            // Enable lint rules for React
-            reactX.configs['recommended-typescript'],
-            // Enable lint rules for React DOM
-            reactDom.configs.recommended,
-        ],
-        languageOptions: {
-            parserOptions: {
-                project: ['./tsconfig.node.json', './tsconfig.app.json'],
-                tsconfigRootDir: import.meta.dirname,
-            },
-            // other options...
-        },
-    },
-]);
+| Script                 | What it does                                            |
+| ---------------------- | ------------------------------------------------------- |
+| `npm run dev`          | Start the dev server with hot reload                    |
+| `npm run build`        | Type check and build the production site into `dist/`   |
+| `npm run preview`      | Serve the built `dist/` locally                         |
+| `npm test`             | Run the tests once                                      |
+| `npm run test:watch`   | Re-run the tests on every change                        |
+| `npm run lint`         | Lint with ESLint                                        |
+| `npm run typecheck`    | Type check with `tsc`                                   |
+| `npm run format`       | Format all files with Prettier                          |
+| `npm run format:check` | Fail if any file is not formatted                       |
+| `npm run check`        | Format check, lint, type check and tests, in that order |
+
+Run `npm run check` before deploying.
+
+## Project structure
+
 ```
+index.html            Page shell: title, meta description, favicon links
+public/               Static files served as-is
+  favicon.ico, *.png  Favicons and app icons
+  site.webmanifest    Home screen icon manifest
+  imgs/               Logo and banner
+src/
+  App.tsx             The whole page, split into section components
+  App.test.tsx        Tests
+  index.css           Styles
+  main.tsx            Entry point
+  test/setup.ts       Shared test setup
+```
+
+## Editing content
+
+Business details are constants at the top of `src/App.tsx`:
+
+- `ADDRESS`, `PHONE`, `PHONE_HREF`, `EMAIL`, `MAP_QUERY`: contact details and
+  map location
+- `COMPANY`, `BUSINESS_ID`: owner company and Y-tunnus shown in the footer
+- `OPEN_HOUR`, `CLOSE_HOUR`: drive the "Avoinna nyt" / "Suljettu" badge
+- `HOURS`: the opening hours list, Monday first. Add a `note` to a day for
+  holidays (for example `note: 'Pyhäinpäivä'`)
+- `PAYMENTS`: the payment method cards
+
+The tests check several of these values, so update `src/App.test.tsx` when you
+change them.
+
+## Tests
+
+Tests use Vitest and React Testing Library in a simulated browser (jsdom). They
+cover the open/closed badge at the opening-hour boundaries, today's highlight in
+the hours list, the mobile menu, the contact links and the footer. Tests that
+depend on the time fix the clock, so they give the same result on any day.
+
+## Favicons
+
+The icons in `public/` were generated from `public/imgs/topwash-logo.jpg`. The
+small sizes (16, 32 and 48 px) use only the arch and car, because the "TOP WASH"
+text is unreadable at that size. The 180, 192 and 512 px icons use the full
+logo. If the logo changes, regenerate all of them.
